@@ -21,7 +21,7 @@ app.use(cors());
 app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+var dotenv = require('dotenv').config({path: path.join(__dirname, '.env')})
 app.use(require('method-override')());
 app.use(express.static(__dirname + '/public'));
 
@@ -37,6 +37,8 @@ if(isProduction){
   mongoose.connect('mongodb://localhost/conduit');
   mongoose.set('debug', true);
 }
+require('./models/User');
+require('./config/passport');
 
 app.use(require('./routes'));
 
@@ -77,4 +79,5 @@ app.use(function(err, req, res, next) {
 // finally, let's start our server...
 var server = app.listen( process.env.PORT || 3000, function(){
   console.log('Listening on port ' + server.address().port);
+  console.log(process.env.FB_CLIENT_ID)
 });
